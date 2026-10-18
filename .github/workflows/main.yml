@@ -1,0 +1,25 @@
+name: Build mod
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '8'
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '4.9'
+      - name: Unpack
+        run: unzip -q livingflesh-0.1.zip
+      - name: Build
+        working-directory: livingflesh
+        run: gradle setupCiWorkspace build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: livingflesh-jar
+          path: livingflesh/build/libs/*.jar
