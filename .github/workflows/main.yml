@@ -18,6 +18,11 @@ jobs:
         run: unzip -q livingflesh-0.1.zip
       - name: Use Forge 2847
         run: sed -i 's/14\.23\.5\.2860/14.23.5.2847/g' livingflesh/build.gradle
+      - name: Patch names
+        run: |
+          F=livingflesh/src/main/java/com/livingflesh
+          sed -i 's#setUnlocalizedName#setTranslationKey#' $F/block/BlockFlesh.java $F/block/BlockFleshCore.java
+          sed -i 's#EnumFacing facing = EnumFacing.getHorizontal(rand.nextInt(4));#int dir = rand.nextInt(4);#; s#facing.getFrontOffsetX()#(dir == 2 ? 1 : dir == 3 ? -1 : 0)#g; s#facing.getFrontOffsetZ()#(dir == 0 ? 1 : dir == 1 ? -1 : 0)#g' $F/world/FleshSpreader.java
       - name: Build
         working-directory: livingflesh
         run: gradle setupCiWorkspace build --no-daemon
