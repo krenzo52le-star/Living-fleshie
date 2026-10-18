@@ -16,6 +16,8 @@ jobs:
           gradle-version: '4.9'
       - name: Unpack
         run: unzip -q livingflesh-0.1.zip
+      - name: Use Forge 2847
+        run: sed -i 's/14\.23\.5\.2860/14.23.5.2847/g' livingflesh/build.gradle
       - name: Build
         working-directory: livingflesh
         run: gradle setupCiWorkspace build --no-daemon
